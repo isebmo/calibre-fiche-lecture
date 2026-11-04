@@ -1,0 +1,25 @@
+# Artefacts de build
+fiche_lecture_gemini.zip
+*.zip
+*.mo
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Sorties de l'outil CLI de test
+fiche_de_lecture.*
+
+# Livres de test
+*.epub
+*.kepub
+*.azw3
+
+# Divers
+.DS_Store
+.env
+.env.*
+.idea/
+.vscode/
+*.swp
+*~

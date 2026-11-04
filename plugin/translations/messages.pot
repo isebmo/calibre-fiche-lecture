@@ -1,0 +1,531 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Fiche de lecture package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Fiche de lecture\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-04 15:03+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: __init__.py:10
+msgid "Generates complete reading notes (introduction, chapter-by-chapter summary, critical analysis) for the selected book with Google Gemini or Claude Code."
+msgstr ""
+
+#: claude_code.py:92
+#, python-brace-format
+msgid "error: {error}"
+msgstr ""
+
+#: claude_code.py:101
+msgid "The `claude` executable (Claude Code) was not found. Install it or set its path in the configuration."
+msgstr ""
+
+#: claude_code.py:109
+msgid "default model"
+msgstr ""
+
+#: claude_code.py:151
+#, python-brace-format
+msgid "Timed out ({seconds} s)."
+msgstr ""
+
+#: claude_code.py:158
+#, python-brace-format
+msgid "exit code {code}"
+msgstr ""
+
+#: claude_code.py:163 gemini.py:150
+msgid "empty response"
+msgstr ""
+
+#: claude_code.py:178
+#, python-brace-format
+msgid "Claude Code: {error} — retrying in {seconds} s ({attempt}/{max})"
+msgstr ""
+
+#: config.py:27
+msgid "Automatic (Gemini if a key is configured, otherwise Claude Code)"
+msgstr ""
+
+#: config.py:28
+msgid "Google Gemini (API)"
+msgstr ""
+
+#: config.py:29
+msgid "Claude Code (local CLI)"
+msgstr ""
+
+#: config.py:35
+msgid "System"
+msgstr ""
+
+#: config.py:36
+msgid "Chapter"
+msgstr ""
+
+#: config.py:37
+msgid "Part of a long chapter"
+msgstr ""
+
+#: config.py:38
+msgid "Merging the parts"
+msgstr ""
+
+#: config.py:39
+msgid "Introduction"
+msgstr ""
+
+#: config.py:40
+msgid "Critique"
+msgstr ""
+
+#: config.py:77
+msgid "Default engine:"
+msgstr ""
+
+#: config.py:82
+msgid "Number of chapters summarized at the same time."
+msgstr ""
+
+#: config.py:83
+msgid "Parallel requests:"
+msgstr ""
+
+#: config.py:88
+msgid "Retries:"
+msgstr ""
+
+#: config.py:90
+msgid "Reuse summaries already generated (resume after an error)"
+msgstr ""
+
+#: config.py:95
+msgid "(uses the account signed in to Claude Code, no key needed)"
+msgstr ""
+
+#: config.py:98
+msgid "automatic detection"
+msgstr ""
+
+#: config.py:100
+msgid "Detect"
+msgstr ""
+
+#: config.py:103
+msgid "claude executable:"
+msgstr ""
+
+#: config.py:111
+msgid "Alias (sonnet, opus, haiku) or full name; empty = Claude Code default model."
+msgstr ""
+
+#: config.py:112
+msgid "Claude model:"
+msgstr ""
+
+#: config.py:114
+msgid "e.g. --effort low"
+msgstr ""
+
+#: config.py:115
+msgid "Extra arguments:"
+msgstr ""
+
+#: config.py:120
+msgid "Max. time per request:"
+msgstr ""
+
+#: config.py:121
+msgid "Engine"
+msgstr ""
+
+#: config.py:129
+msgid "Key from https://aistudio.google.com/apikey (or $GEMINI_API_KEY)"
+msgstr ""
+
+#: config.py:130
+msgid "Gemini API key:"
+msgstr ""
+
+#: config.py:138
+msgid "List models"
+msgstr ""
+
+#: config.py:139
+msgid "Queries the API with the key entered (also checks that the key works)."
+msgstr ""
+
+#: config.py:142
+msgid "Model:"
+msgstr ""
+
+#: config.py:148
+msgid "Temperature:"
+msgstr ""
+
+#: config.py:154
+msgid "Minimum delay between two requests, to stay within the quota (free tier: ~4-6 s)."
+msgstr ""
+
+#: config.py:155
+msgid "Minimum interval:"
+msgstr ""
+
+#: config.py:165
+msgid "1 = only the top-level entries of the table of contents."
+msgstr ""
+
+#: config.py:166
+msgid "Table of contents depth:"
+msgstr ""
+
+#: config.py:172
+msgid "Shorter sections are merged with the next one."
+msgstr ""
+
+#: config.py:173
+msgid "Minimum section size (chars):"
+msgstr ""
+
+#: config.py:179
+msgid "Beyond this, the chapter is split into parts that are summarized separately, then merged."
+msgstr ""
+
+#: config.py:180
+msgid "Maximum size sent at once (chars):"
+msgstr ""
+
+#: config.py:184
+msgid "Regular expression: sections whose title matches are skipped."
+msgstr ""
+
+#: config.py:185
+msgid "Titles to skip (regex):"
+msgstr ""
+
+#: config.py:186
+msgid "Splitting"
+msgstr ""
+
+#: config.py:194
+#, python-brace-format
+msgid "Same as the calibre interface ({language})"
+msgstr ""
+
+#: config.py:213
+msgid "Language of the generated notes (headings, prompts and text written by the AI). You can also type another language, e.g. “日本語” or “Nederlands”: the English prompts are then used, asking for an answer in that language."
+msgstr ""
+
+#: config.py:217
+msgid "Notes language:"
+msgstr ""
+
+#: config.py:218
+msgid "Save in the book folder (calibre data files)"
+msgstr ""
+
+#: config.py:223
+msgid "(optional) also copy to this folder"
+msgstr ""
+
+#: config.py:228
+msgid "Export folder:"
+msgstr ""
+
+#: config.py:229
+msgid "Open the notes when generation finishes"
+msgstr ""
+
+#: config.py:232
+msgid "Also add the notes (EPUB) as a book in the library"
+msgstr ""
+
+#: config.py:233
+msgid "Opens in the calibre viewer and can be sent to an e-reader. Title: “<Title> — Reading Notes” (in the notes language)."
+msgstr ""
+
+#: config.py:237
+msgid "Output"
+msgstr ""
+
+#: config.py:242
+msgid "Variables:"
+msgstr ""
+
+#: config.py:244
+msgid "Unmodified prompts follow the notes language. A modified prompt is used as is, whatever the language."
+msgstr ""
+
+#: config.py:258
+msgid "Restore the default prompts"
+msgstr ""
+
+#: config.py:261
+msgid "Prompts"
+msgstr ""
+
+#: config.py:290
+msgid "Export folder"
+msgstr ""
+
+#: config.py:300 ui.py:119
+msgid "Claude Code not found"
+msgstr ""
+
+#: config.py:309
+#, python-brace-format
+msgid "Could not list the models: {error}"
+msgstr ""
+
+#: extractor.py:124
+#, python-brace-format
+msgid "Unreadable table of contents ({error}): splitting by file."
+msgstr ""
+
+#: extractor.py:139
+msgid "Untitled"
+msgstr ""
+
+#: extractor.py:144
+msgid "No usable table of contents: one section per file."
+msgstr ""
+
+#: extractor.py:167
+#, python-brace-format
+msgid "Skipped file {name}: {error}"
+msgstr ""
+
+#: extractor.py:178
+#, python-brace-format
+msgid "Section {number}"
+msgstr ""
+
+#: extractor.py:189
+#, python-brace-format
+msgid "Skipped section (filtered title): {title}"
+msgstr ""
+
+#: gemini.py:73
+msgid "No Gemini API key is configured."
+msgstr ""
+
+#: gemini.py:130 gemini.py:131
+#, python-brace-format
+msgid "Network error: {error}"
+msgstr ""
+
+#: gemini.py:132
+#, python-brace-format
+msgid "{message} — retrying in {seconds:.0f} s ({attempt}/{max})"
+msgstr ""
+
+#: gemini.py:151
+#, python-brace-format
+msgid "Request refused by Gemini ({reason})."
+msgstr ""
+
+#: gemini.py:157
+#, python-brace-format
+msgid "Empty response from Gemini (finishReason={reason})."
+msgstr ""
+
+#: gemini.py:159
+msgid "Truncated response: length limit reached."
+msgstr ""
+
+#: mdrender.py:31
+#, python-brace-format
+msgid "Markdown conversion failed ({error}): using plain text."
+msgstr ""
+
+#: summarizer.py:115
+msgid "Splitting the book into chapters…"
+msgstr ""
+
+#: summarizer.py:119
+msgid "No chapters could be extracted from this book."
+msgstr ""
+
+#: summarizer.py:121
+msgid "{sections} sections found, {chars:,} characters."
+msgstr ""
+
+#: summarizer.py:125
+#, python-brace-format
+msgid "Engine: {engine} — notes language: {language}"
+msgstr ""
+
+#: summarizer.py:169
+#, python-brace-format
+msgid "Summary {done}/{total}: {title}"
+msgstr ""
+
+#: summarizer.py:180
+msgid "Writing the introduction…"
+msgstr ""
+
+#: summarizer.py:182
+msgid "Writing the critical analysis…"
+msgstr ""
+
+#: summarizer.py:188
+#, python-brace-format
+msgid "Done in {seconds:.0f} s ({calls} calls, {hits} cached answers"
+msgstr ""
+
+#: summarizer.py:191
+#, python-brace-format
+msgid ", estimated cost ${cost:.2f}"
+msgstr ""
+
+#: ui.py:55
+msgid "Reading notes"
+msgstr ""
+
+#: ui.py:55
+msgid "Generate reading notes with Gemini or Claude Code"
+msgstr ""
+
+#: ui.py:65
+msgid "Generate reading notes"
+msgstr ""
+
+#: ui.py:66
+msgid "Generate with Gemini"
+msgstr ""
+
+#: ui.py:67 ui.py:83
+msgid "Generate with Claude Code"
+msgstr ""
+
+#: ui.py:69
+msgid "Regenerate without using the cache"
+msgstr ""
+
+#: ui.py:72
+msgid "Open the notes in the viewer"
+msgstr ""
+
+#: ui.py:73
+msgid "Preview the chapter split"
+msgstr ""
+
+#: ui.py:75
+msgid "Configure…"
+msgstr ""
+
+#: ui.py:84
+msgid "Generate with Claude Code (not installed)"
+msgstr ""
+
+#: ui.py:94
+msgid "No book"
+msgstr ""
+
+#: ui.py:94
+msgid "Select at least one book."
+msgstr ""
+
+#: ui.py:120
+msgid "Install Claude Code or set the path of the `claude` executable in the plugin configuration."
+msgstr ""
+
+#: ui.py:123
+msgid "Missing API key"
+msgstr ""
+
+#: ui.py:124
+msgid "Set your Gemini API key in the plugin settings."
+msgstr ""
+
+#: ui.py:140
+#, python-brace-format
+msgid "Reading notes ({engine}): {title}"
+msgstr ""
+
+#: ui.py:147 ui.py:281
+msgid "Unsupported format"
+msgstr ""
+
+#: ui.py:148
+msgid "These books have no EPUB, KEPUB or AZW3 format (convert them first):"
+msgstr ""
+
+#: ui.py:153
+#, python-brace-format
+msgid "Reading notes: {count} job started"
+msgid_plural "Reading notes: {count} jobs started"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ui.py:160
+msgid "Reading notes failed"
+msgstr ""
+
+#: ui.py:176
+msgid "Saving"
+msgstr ""
+
+#: ui.py:176
+msgid "Could not save in the book folder."
+msgstr ""
+
+#: ui.py:189
+#, python-brace-format
+msgid "Reading notes for “{title}” ready ({engine}): {chapters} chapters, {calls} calls"
+msgstr ""
+
+#: ui.py:220
+msgid "Unknown"
+msgstr ""
+
+#: ui.py:236
+msgid "Adding to the library"
+msgstr ""
+
+#: ui.py:236
+msgid "Could not add the notes as a book."
+msgstr ""
+
+#: ui.py:259
+msgid "No notes"
+msgstr ""
+
+#: ui.py:259
+msgid "This book has no reading notes yet."
+msgstr ""
+
+#: ui.py:281
+msgid "EPUB, KEPUB or AZW3 required."
+msgstr ""
+
+#: ui.py:288
+msgid "Splitting error"
+msgstr ""
+
+#: ui.py:294
+msgid "{number:3d}. {title}  —  {chars:,} characters"
+msgstr ""
+
+#: ui.py:296
+msgid "{sections} sections, {chars:,} characters (≈ {tokens:,} tokens)"
+msgstr ""
+
+#: ui.py:299
+msgid "Log:"
+msgstr ""
+
+#: ui.py:301
+msgid "Chapter split"
+msgstr ""

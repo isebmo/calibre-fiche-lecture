@@ -1,0 +1,47 @@
+# Construit le zip de l'extension et l'attache à la release du tag poussé (v*).
+# Si la release existe déjà (créée à la main), le zip est simplement remplacé.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer gettext (msgfmt) et zip
+        run: sudo apt-get update && sudo apt-get install -y gettext zip
+
+      - name: Construire l'extension
+        run: ./build.sh
+
+      - name: Vérifier le contenu du zip
+        run: |
+          unzip -l fiche_lecture_gemini.zip
+          unzip -l fiche_lecture_gemini.zip | grep -q 'translations/fr.mo'
+          ! unzip -l fiche_lecture_gemini.zip | grep -E 'cli\.py|\.po$|\.pot$|__pycache__'
+
+      - name: Publier sur la release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" fiche_lecture_gemini.zip --clobber
+          else
+            gh release create "$TAG" fiche_lecture_gemini.zip --title "$TAG" --generate-notes
+          fi
+
+      - name: Conserver le zip comme artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fiche_lecture_gemini
+          path: fiche_lecture_gemini.zip
