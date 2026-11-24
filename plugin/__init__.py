@@ -11,7 +11,7 @@ class FicheLectureGeminiPlugin(InterfaceActionBase):
                     'critical analysis) for the selected book with Google Gemini or Claude Code.')
     supported_platforms = ['windows', 'osx', 'linux']
     author = 'Sébastien Mouret'
-    version = (0, 3, 0)
+    version = (0, 4, 0)
     minimum_calibre_version = (6, 18, 0)
 
     actual_plugin = 'calibre_plugins.fiche_lecture_gemini.ui:FicheLectureAction'
