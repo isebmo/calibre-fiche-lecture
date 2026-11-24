@@ -9,7 +9,7 @@ import html
 import os
 import threading
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 
 try:
     load_translations()
@@ -23,6 +23,7 @@ try:
     from calibre_plugins.fiche_lecture_gemini.epub import build_epub
     from calibre_plugins.fiche_lecture_gemini.mdrender import markdown_to_html_fragment
     from calibre_plugins.fiche_lecture_gemini.gemini import GeminiClient
+    from calibre_plugins.fiche_lecture_gemini.defaults import FREE_TIER_INTERVAL, FREE_TIER_PARALLEL
 except ImportError:  # exécution hors calibre GUI (cli.py)
     from claude_code import ClaudeCodeClient
     from epub import build_epub
@@ -30,8 +31,18 @@ except ImportError:  # exécution hors calibre GUI (cli.py)
     from extractor import extract_chapters, split_text
     from gemini import GeminiClient
     from i18n import effective_prompt, resolve_language
+    from defaults import FREE_TIER_INTERVAL, FREE_TIER_PARALLEL
 
 PROVIDERS = {'gemini': 'Gemini', 'claude_code': 'Claude Code'}
+
+
+def free_tier(s):
+    return s['provider'] == 'gemini' and bool(s.get('gemini_free_tier'))
+
+
+def parallelism(s):
+    """Nombre de requêtes simultanées : 1 en mode Gemini gratuit, sinon le réglage."""
+    return FREE_TIER_PARALLEL if free_tier(s) else max(1, int(s['parallel_requests']))
 
 
 def make_client(s, should_stop, log):
@@ -40,7 +51,8 @@ def make_client(s, should_stop, log):
                                 max_retries=s['max_retries'], timeout=s['claude_timeout'],
                                 should_stop=should_stop, log=log)
     return GeminiClient(s['api_key'], s['model'], temperature=s['temperature'], max_retries=s['max_retries'],
-                        min_interval=s['min_interval'], timeout=s['request_timeout'],
+                        min_interval=FREE_TIER_INTERVAL if free_tier(s) else 0.0,
+                        timeout=s['request_timeout'], free_tier=free_tier(s),
                         should_stop=should_stop, log=log)
 
 
@@ -145,42 +157,66 @@ def _run(s, meta, chapters, client, system, common, notify, stop, t0, lang):
         cache.put(key, answer)
         return answer
 
-    def summarize(i, ch):
-        vals = dict(common, index=i + 1, total=total, chapter_title=ch.title)
-        parts = split_text(ch.text, s['max_chunk_chars'])
-        if len(parts) == 1:
-            return ask(render(s['chapter_prompt'], text=ch.text, **vals))
-        notes = [ask(render(s['part_prompt'], text=p, part=j + 1, parts=len(parts), **vals))
-                 for j, p in enumerate(parts)]
-        part = lang.labels['part']
-        joined = '\n\n'.join(f'#### {part} {j + 1}\n{n}' for j, n in enumerate(notes))
-        return ask(render(s['merge_prompt'], text=joined, **vals))
+    def vals(i, ch):
+        return dict(common, index=i + 1, total=total, chapter_title=ch.title)
 
-    # 1. Résumés des chapitres (« map »)
+    def merge_prompt(i):
+        part = lang.labels['part']
+        joined = '\n\n'.join(f'#### {part} {j + 1}\n{n}' for j, n in enumerate(notes[i]))
+        return render(s['merge_prompt'], text=joined, **vals(i, chapters[i]))
+
+    # 1. Résumés des chapitres (« map »). Chapitres et parties des chapitres longs partagent le même
+    # pool ; la fusion d'un chapitre découpé est lancée dès que toutes ses parties sont prêtes.
+    # Les chapitres découpés (chemin le plus long : parties puis fusion) partent en premier,
+    # puis les autres du plus long au plus court, pour que le dernier à finir soit court.
+    split = {i: split_text(ch.text, s['max_chunk_chars']) for i, ch in enumerate(chapters)}
+    order = sorted(range(total), key=lambda i: (len(split[i]) == 1, -len(chapters[i].text)))
     summaries = [None] * total
+    notes = {i: [None] * len(p) for i, p in split.items() if len(p) > 1}
     done = 0
-    with ThreadPoolExecutor(max_workers=max(1, int(s['parallel_requests']))) as ex:
-        futures = {ex.submit(summarize, i, ch): i for i, ch in enumerate(chapters)}
+    pending = {}
+    with ThreadPoolExecutor(max_workers=parallelism(s)) as ex:
+        def submit(prompt, *tag):
+            pending[ex.submit(ask, prompt)] = tag
+
         try:
-            for fut in as_completed(futures):
-                i = futures[fut]
-                summaries[i] = fut.result()
-                done += 1
-                notify(0.03 + 0.82 * done / total, _('Summary {done}/{total}: {title}').format(
-                    done=done, total=total, title=chapters[i].title))
+            for i in order:
+                ch, parts = chapters[i], split[i]
+                if len(parts) == 1:
+                    submit(render(s['chapter_prompt'], text=ch.text, **vals(i, ch)), 'chapter', i)
+                else:
+                    for j, p in enumerate(parts):
+                        submit(render(s['part_prompt'], text=p, part=j + 1, parts=len(parts), **vals(i, ch)),
+                               'part', i, j)
+            while pending:
+                finished, _still_running = wait(pending, return_when=FIRST_COMPLETED)
+                for fut in finished:
+                    kind, i, *j = pending.pop(fut)
+                    if kind == 'part':
+                        notes[i][j[0]] = fut.result()
+                        if all(n is not None for n in notes[i]):
+                            submit(merge_prompt(i), 'chapter', i)
+                        continue
+                    summaries[i] = fut.result()
+                    done += 1
+                    notify(0.03 + 0.82 * done / total, _('Summary {done}/{total}: {title}').format(
+                        done=done, total=total, title=chapters[i].title))
+
+            # 2. Synthèse (« reduce ») : introduction et critique, lancées ensemble
+            digest = '\n\n'.join(f'### {i + 1}. {ch.title}\n{summ}'
+                                   for i, (ch, summ) in enumerate(zip(chapters, summaries)))
+            intro_f = ex.submit(ask, render(s['intro_prompt'], summaries=digest, **common))
+            critique_f = ex.submit(ask, render(s['critique_prompt'], summaries=digest, **common))
+            pending = {intro_f: None, critique_f: None}
+            notify(0.87, _('Writing the introduction…'))
+            intro = intro_f.result()
+            notify(0.94, _('Writing the critical analysis…'))
+            critique = critique_f.result()
         except BaseException:
             stop.set()
-            for f in futures:
+            for f in pending:
                 f.cancel()
             raise
-
-    # 2. Synthèse (« reduce ») : introduction puis critique
-    digest = '\n\n'.join(f'### {i + 1}. {ch.title}\n{summ}'
-                         for i, (ch, summ) in enumerate(zip(chapters, summaries)))
-    notify(0.87, _('Writing the introduction…'))
-    intro = ask(render(s['intro_prompt'], summaries=digest, **common))
-    notify(0.94, _('Writing the critical analysis…'))
-    critique = ask(render(s['critique_prompt'], summaries=digest, **common))
 
     markdown_doc = build_markdown(meta, client.label, chapters, summaries, intro, critique, lang)
     elapsed = time.monotonic() - t0

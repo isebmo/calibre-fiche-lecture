@@ -33,8 +33,10 @@ DEFAULTS = {
     'api_key': '',
     'model': 'gemini-2.5-flash',
     'temperature': 0.4,
-    'parallel_requests': 1,
-    'min_interval': 4.0,      # secondes minimum entre deux requêtes (quota gratuit ≈ 10-15 req/min)
+    # Clé Gemini du niveau gratuit : une requête à la fois, espacées (quota ≈ 10 req/min)
+    'gemini_free_tier': False,
+    # Requêtes simultanées (Claude Code, Gemini payant). Ignoré en mode Gemini gratuit.
+    'parallel_requests': 6,
     'max_retries': 6,
     'request_timeout': 300,
     'use_cache': True,
@@ -57,6 +59,13 @@ DEFAULTS = {
     'intro_prompt': '',
     'critique_prompt': '',
 }
+
+# Mode « Gemini gratuit »
+FREE_TIER_PARALLEL = 1
+FREE_TIER_INTERVAL = 6.0   # secondes entre deux requêtes
+
+# Version des réglages enregistrés (migration des anciennes valeurs par défaut, voir config.py)
+SETTINGS_VERSION = 2
 
 PROMPT_KEYS = ['system_prompt', 'chapter_prompt', 'part_prompt', 'merge_prompt', 'intro_prompt',
                'critique_prompt']

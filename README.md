@@ -75,8 +75,9 @@ Version minimale : **calibre 6.18** (Windows, macOS, Linux).
 | Appel | REST `generateContent` | `claude -p --tools "" --system-prompt … --output-format json`, texte sur stdin, dossier temporaire vide |
 
 - **Gemini** : créez une clé sur <https://aistudio.google.com/apikey> et collez-la dans la configuration de
-  l'extension. Le bouton « Lister les modèles » vérifie la clé. L'intervalle entre requêtes et les nouvelles
-  tentatives (429/5xx) respectent le quota.
+  l'extension. Le bouton « Lister les modèles » vérifie la clé. Avec une **clé gratuite**, cochez « Clé gratuite
+  (mode lent) » dans l'onglet Gemini : une requête à la fois, espacées de 6 s, pour rester dans le quota.
+  Avec une clé payante, laissez décoché : les requêtes partent en parallèle.
 - **Claude Code** : rien à configurer si la CLI `claude` est installée et connectée. Elle est détectée
   automatiquement (`PATH`, `~/.local/bin`, `~/.claude/local`, Homebrew, npm…) ; un chemin peut être forcé
   dans les réglages. Claude est appelé **sans aucun outil**, dans un dossier temporaire vide.
@@ -107,9 +108,9 @@ le modèle et les `.po`.
 Livre ─► extractor ─► [chapitre 1 … chapitre N]
                          │   (chapitre trop long ► parties ► notes ► fusion)
                          ▼
-               IA : résumé de chaque chapitre      (« map », parallélisable, mis en cache)
+               IA : résumé de chaque chapitre      (« map », 6 requêtes en parallèle par défaut, mis en cache)
                          ▼
-               IA : introduction  ◄── tous les résumés   (« reduce »)
+               IA : introduction  ◄── tous les résumés   (« reduce », les deux en parallèle)
                IA : analyse critique ◄── tous les résumés
                          ▼
                Markdown + HTML + EPUB ─► dossier du livre (data/<Titre> - Fiche de lecture.*)
@@ -137,7 +138,9 @@ Livre ─► extractor ─► [chapitre 1 … chapitre N]
 ### Robustesse
 
 - Exécution en **tâche de fond** calibre (annulable, progression dans la liste des tâches).
-- Respect du quota : intervalle minimal entre requêtes, nouvelles tentatives sur 429/5xx avec le délai indiqué par l'API.
+- **Rapide par défaut** : chapitres, parties des chapitres longs, introduction et critique partagent un même pool de
+  requêtes parallèles (réglage « Requêtes en parallèle », 6 par défaut) ; les chapitres les plus longs partent en premier.
+- Nouvelles tentatives sur 429/5xx avec le délai indiqué par l'API ; mode « Clé gratuite » pour le quota Gemini gratuit.
 - **Cache** des réponses (dossier cache de calibre) : une relance après échec ne refacture pas les chapitres
   déjà résumés. Menu « Régénérer sans utiliser le cache » pour forcer.
 
@@ -178,6 +181,7 @@ cd calibre-fiche-lecture
 ```sh
 calibre-debug plugin/cli.py -- "livre.epub"                                               # aperçu du découpage, sans appel API
 GEMINI_API_KEY=… calibre-debug plugin/cli.py -- "livre.epub" --run                        # fiche avec Gemini
+GEMINI_API_KEY=… calibre-debug plugin/cli.py -- "livre.epub" --run --free-tier            # clé Gemini gratuite (mode lent)
 calibre-debug plugin/cli.py -- "livre.epub" --run --engine claude_code --model sonnet     # avec Claude Code
 calibre-debug plugin/cli.py -- "livre.epub" --run --engine claude_code --language en      # fiche en anglais
 # -> fiche_de_lecture.md / .html / .epub

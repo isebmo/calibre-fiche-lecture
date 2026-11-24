@@ -19,6 +19,8 @@ def main(argv):
     ap.add_argument('book')
     ap.add_argument('--run', action='store_true')
     ap.add_argument('--engine', choices=['gemini', 'claude_code'], default='gemini')
+    ap.add_argument('--free-tier', action='store_true', help='clé Gemini gratuite : mode lent (1 requête à la fois)')
+    ap.add_argument('--parallel', type=int, default=DEFAULTS['parallel_requests'], help='requêtes simultanées')
     ap.add_argument('--model', help='modèle Gemini ou Claude (sonnet, opus, haiku…)')
     ap.add_argument('--toc-depth', type=int, default=DEFAULTS['toc_depth'])
     ap.add_argument('--min-chars', type=int, default=DEFAULTS['min_chapter_chars'])
@@ -36,7 +38,8 @@ def main(argv):
 
     from summarizer import run_fiche
     settings = dict(DEFAULTS, api_key=os.environ.get('GEMINI_API_KEY', ''), provider=a.engine,
-                    toc_depth=a.toc_depth, min_chapter_chars=a.min_chars, language=a.language)
+                    toc_depth=a.toc_depth, min_chapter_chars=a.min_chars, language=a.language,
+                    gemini_free_tier=a.free_tier, parallel_requests=a.parallel)
     if a.model:
         settings['claude_model' if a.engine == 'claude_code' else 'model'] = a.model
     from calibre.ebooks.metadata.meta import get_metadata

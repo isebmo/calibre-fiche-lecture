@@ -10,7 +10,8 @@ from calibre.utils.config import JSONConfig
 
 from calibre_plugins.fiche_lecture_gemini.claude_code import CLAUDE_MODELS
 from calibre_plugins.fiche_lecture_gemini.defaults import (
-    DEFAULTS, OLD_SKIP_TITLES_REGEXES, PREFS_NAMESPACE, PROMPT_KEYS, SKIP_TITLES_REGEX,
+    DEFAULTS, FREE_TIER_INTERVAL, OLD_SKIP_TITLES_REGEXES, PREFS_NAMESPACE, PROMPT_KEYS, SETTINGS_VERSION,
+    SKIP_TITLES_REGEX,
 )
 from calibre_plugins.fiche_lecture_gemini.i18n import (
     LANGUAGE_NAMES, PROMPTS, interface_language, is_builtin_prompt, resolve_language,
@@ -20,6 +21,23 @@ load_translations()
 
 prefs = JSONConfig(PREFS_NAMESPACE)
 prefs.defaults.update(DEFAULTS)
+
+
+def _migrate_prefs():
+    """Réglages enregistrés avec la 0.3.x, où les valeurs par défaut visaient le quota Gemini gratuit
+    (1 requête à la fois, 4 s d'intervalle) : on passe au mode rapide, sauf pour une clé Gemini
+    configurée avec un intervalle, qu'on bascule en mode « Gemini gratuit » pour ne rien casser."""
+    if prefs['settings_version'] >= SETTINGS_VERSION:
+        return
+    if 'parallel_requests' in prefs and prefs['parallel_requests'] == 1:
+        prefs['parallel_requests'] = DEFAULTS['parallel_requests']
+    if 'min_interval' in prefs and prefs['min_interval'] > 0 and prefs['api_key']:
+        prefs['gemini_free_tier'] = True
+    prefs['settings_version'] = SETTINGS_VERSION
+
+
+prefs.defaults['settings_version'] = 1
+_migrate_prefs()
 
 
 def provider_choices():
@@ -79,7 +97,8 @@ class ConfigWidget(QWidget):
         self.parallel = QSpinBox()
         self.parallel.setRange(1, 16)
         self.parallel.setValue(prefs['parallel_requests'])
-        self.parallel.setToolTip(_('Number of chapters summarized at the same time.'))
+        self.parallel.setToolTip(_('Number of requests sent at the same time (chapters, parts of long '
+                                   'chapters, introduction and critique). Ignored in Gemini free tier mode.'))
         f.addRow(_('Parallel requests:'), self.parallel)
 
         self.max_retries = QSpinBox()
@@ -147,12 +166,11 @@ class ConfigWidget(QWidget):
         self.temperature.setValue(prefs['temperature'])
         f.addRow(_('Temperature:'), self.temperature)
 
-        self.min_interval = QDoubleSpinBox()
-        self.min_interval.setRange(0, 120)
-        self.min_interval.setSuffix(' s')
-        self.min_interval.setValue(prefs['min_interval'])
-        self.min_interval.setToolTip(_('Minimum delay between two requests, to stay within the quota (free tier: ~4-6 s).'))
-        f.addRow(_('Minimum interval:'), self.min_interval)
+        self.free_tier = QCheckBox(_('Free tier key (slow mode)'))
+        self.free_tier.setToolTip(_('One request at a time, {seconds:.0f} s apart, to stay within the free quota. '
+                                    'Leave unchecked with a paid key: much faster.').format(seconds=FREE_TIER_INTERVAL))
+        self.free_tier.setChecked(prefs['gemini_free_tier'])
+        f.addRow(self.free_tier)
 
         tabs.addTab(w, 'Gemini')
 
@@ -322,7 +340,7 @@ class ConfigWidget(QWidget):
         prefs['model'] = self.model.currentText().strip() or DEFAULTS['model']
         prefs['temperature'] = self.temperature.value()
         prefs['parallel_requests'] = self.parallel.value()
-        prefs['min_interval'] = self.min_interval.value()
+        prefs['gemini_free_tier'] = self.free_tier.isChecked()
         prefs['max_retries'] = self.max_retries.value()
         prefs['use_cache'] = self.use_cache.isChecked()
         prefs['toc_depth'] = self.toc_depth.value()

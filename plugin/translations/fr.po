@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Fiche de lecture\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-04 15:03+0100\n"
+"POT-Creation-Date: 2026-11-24 18:46+0100\n"
 "PO-Revision-Date: 2026-11-04 15:00+0100\n"
 "Last-Translator: Sébastien Mouret\n"
 "Language-Team: French\n"
@@ -41,7 +41,7 @@ msgstr "Délai dépassé ({seconds} s)."
 msgid "exit code {code}"
 msgstr "code de sortie {code}"
 
-#: claude_code.py:163 gemini.py:150
+#: claude_code.py:163 gemini.py:157
 msgid "empty response"
 msgstr "réponse vide"
 
@@ -50,236 +50,237 @@ msgstr "réponse vide"
 msgid "Claude Code: {error} — retrying in {seconds} s ({attempt}/{max})"
 msgstr "Claude Code : {error} — nouvel essai dans {seconds} s ({attempt}/{max})"
 
-#: config.py:27
+#: config.py:45
 msgid "Automatic (Gemini if a key is configured, otherwise Claude Code)"
 msgstr "Automatique (Gemini si clé configurée, sinon Claude Code)"
 
-#: config.py:28
+#: config.py:46
 msgid "Google Gemini (API)"
 msgstr "Google Gemini (API)"
 
-#: config.py:29
+#: config.py:47
 msgid "Claude Code (local CLI)"
 msgstr "Claude Code (CLI locale)"
 
-#: config.py:35
+#: config.py:53
 msgid "System"
 msgstr "Système"
 
-#: config.py:36
+#: config.py:54
 msgid "Chapter"
 msgstr "Chapitre"
 
-#: config.py:37
+#: config.py:55
 msgid "Part of a long chapter"
 msgstr "Partie de chapitre long"
 
-#: config.py:38
+#: config.py:56
 msgid "Merging the parts"
 msgstr "Fusion des parties"
 
-#: config.py:39
+#: config.py:57
 msgid "Introduction"
 msgstr "Introduction"
 
-#: config.py:40
+#: config.py:58
 msgid "Critique"
 msgstr "Critique"
 
-#: config.py:77
+#: config.py:95
 msgid "Default engine:"
 msgstr "Moteur par défaut :"
 
-#: config.py:82
-msgid "Number of chapters summarized at the same time."
-msgstr "Nombre de chapitres résumés simultanément."
+#: config.py:100
+msgid "Number of requests sent at the same time (chapters, parts of long chapters, introduction and critique). Ignored in Gemini free tier mode."
+msgstr "Nombre de requêtes envoyées simultanément (chapitres, parties des chapitres longs, introduction et critique). Ignoré en mode Gemini gratuit."
 
-#: config.py:83
+#: config.py:102
 msgid "Parallel requests:"
 msgstr "Requêtes parallèles :"
 
-#: config.py:88
+#: config.py:107
 msgid "Retries:"
 msgstr "Nouvelles tentatives :"
 
-#: config.py:90
+#: config.py:109
 msgid "Reuse summaries already generated (resume after an error)"
 msgstr "Réutiliser les résumés déjà générés (reprise après erreur)"
 
-#: config.py:95
+#: config.py:114
 msgid "(uses the account signed in to Claude Code, no key needed)"
 msgstr "(utilise le compte connecté dans Claude Code, sans clé)"
 
-#: config.py:98
+#: config.py:117
 msgid "automatic detection"
 msgstr "détection automatique"
 
-#: config.py:100
+#: config.py:119
 msgid "Detect"
 msgstr "Détecter"
 
-#: config.py:103
+#: config.py:122
 msgid "claude executable:"
 msgstr "Exécutable claude :"
 
-#: config.py:111
+#: config.py:130
 msgid "Alias (sonnet, opus, haiku) or full name; empty = Claude Code default model."
 msgstr "Alias (sonnet, opus, haiku) ou nom complet ; vide = modèle par défaut de Claude Code."
 
-#: config.py:112
+#: config.py:131
 msgid "Claude model:"
 msgstr "Modèle Claude :"
 
-#: config.py:114
+#: config.py:133
 msgid "e.g. --effort low"
 msgstr "ex. --effort low"
 
-#: config.py:115
+#: config.py:134
 msgid "Extra arguments:"
 msgstr "Arguments supplémentaires :"
 
-#: config.py:120
+#: config.py:139
 msgid "Max. time per request:"
 msgstr "Délai max. par requête :"
 
-#: config.py:121
+#: config.py:140
 msgid "Engine"
 msgstr "Moteur"
 
-#: config.py:129
+#: config.py:148
 msgid "Key from https://aistudio.google.com/apikey (or $GEMINI_API_KEY)"
 msgstr "Clé depuis https://aistudio.google.com/apikey (ou $GEMINI_API_KEY)"
 
-#: config.py:130
+#: config.py:149
 msgid "Gemini API key:"
 msgstr "Clé API Gemini :"
 
-#: config.py:138
+#: config.py:157
 msgid "List models"
 msgstr "Lister les modèles"
 
-#: config.py:139
+#: config.py:158
 msgid "Queries the API with the key entered (also checks that the key works)."
 msgstr "Interroge l'API avec la clé saisie (vérifie aussi que la clé fonctionne)."
 
-#: config.py:142
+#: config.py:161
 msgid "Model:"
 msgstr "Modèle :"
 
-#: config.py:148
+#: config.py:167
 msgid "Temperature:"
 msgstr "Température :"
 
-#: config.py:154
-msgid "Minimum delay between two requests, to stay within the quota (free tier: ~4-6 s)."
-msgstr "Délai minimal entre deux requêtes, pour respecter le quota (gratuit : ~4-6 s)."
+#: config.py:169
+msgid "Free tier key (slow mode)"
+msgstr "Clé gratuite (mode lent)"
 
-#: config.py:155
-msgid "Minimum interval:"
-msgstr "Intervalle minimal :"
+#: config.py:170
+#, python-brace-format
+msgid "One request at a time, {seconds:.0f} s apart, to stay within the free quota. Leave unchecked with a paid key: much faster."
+msgstr "Une requête à la fois, espacées de {seconds:.0f} s, pour respecter le quota gratuit. Laisser décoché avec une clé payante : beaucoup plus rapide."
 
-#: config.py:165
+#: config.py:183
 msgid "1 = only the top-level entries of the table of contents."
 msgstr "1 = seulement les entrées de premier niveau de la table des matières."
 
-#: config.py:166
+#: config.py:184
 msgid "Table of contents depth:"
 msgstr "Profondeur de la table des matières :"
 
-#: config.py:172
+#: config.py:190
 msgid "Shorter sections are merged with the next one."
 msgstr "Les sections plus courtes sont fusionnées avec la suivante."
 
-#: config.py:173
+#: config.py:191
 msgid "Minimum section size (chars):"
 msgstr "Taille minimale d'une section (car.) :"
 
-#: config.py:179
+#: config.py:197
 msgid "Beyond this, the chapter is split into parts that are summarized separately, then merged."
 msgstr "Au-delà, le chapitre est découpé en parties résumées séparément puis fusionnées."
 
-#: config.py:180
+#: config.py:198
 msgid "Maximum size sent at once (chars):"
 msgstr "Taille maximale envoyée en une fois (car.) :"
 
-#: config.py:184
+#: config.py:202
 msgid "Regular expression: sections whose title matches are skipped."
 msgstr "Expression régulière : les sections dont le titre correspond sont ignorées."
 
-#: config.py:185
+#: config.py:203
 msgid "Titles to skip (regex):"
 msgstr "Titres à ignorer (regex) :"
 
-#: config.py:186
+#: config.py:204
 msgid "Splitting"
 msgstr "Découpage"
 
-#: config.py:194
+#: config.py:212
 #, python-brace-format
 msgid "Same as the calibre interface ({language})"
 msgstr "Comme l'interface de calibre ({language})"
 
-#: config.py:213
+#: config.py:231
 msgid "Language of the generated notes (headings, prompts and text written by the AI). You can also type another language, e.g. “日本語” or “Nederlands”: the English prompts are then used, asking for an answer in that language."
 msgstr "Langue de la fiche produite (titres, prompts et texte rédigé par l'IA). Vous pouvez aussi saisir une autre langue, par ex. « 日本語 » ou « Nederlands » : les prompts anglais sont alors utilisés, avec une réponse demandée dans cette langue."
 
-#: config.py:217
+#: config.py:235
 msgid "Notes language:"
 msgstr "Langue de la fiche :"
 
-#: config.py:218
+#: config.py:236
 msgid "Save in the book folder (calibre data files)"
 msgstr "Enregistrer dans le dossier du livre (fichiers de données calibre)"
 
-#: config.py:223
+#: config.py:241
 msgid "(optional) also copy to this folder"
 msgstr "(facultatif) copie dans ce dossier"
 
-#: config.py:228
+#: config.py:246
 msgid "Export folder:"
 msgstr "Dossier d'export :"
 
-#: config.py:229
+#: config.py:247
 msgid "Open the notes when generation finishes"
 msgstr "Ouvrir la fiche à la fin de la génération"
 
-#: config.py:232
+#: config.py:250
 msgid "Also add the notes (EPUB) as a book in the library"
 msgstr "Ajouter aussi la fiche (EPUB) comme livre dans la bibliothèque"
 
-#: config.py:233
+#: config.py:251
 msgid "Opens in the calibre viewer and can be sent to an e-reader. Title: “<Title> — Reading Notes” (in the notes language)."
 msgstr "S'ouvre dans la liseuse de calibre et peut être envoyée sur une liseuse. Titre : « <Titre> — Fiche de lecture » (dans la langue de la fiche)."
 
-#: config.py:237
+#: config.py:255
 msgid "Output"
 msgstr "Sortie"
 
-#: config.py:242
+#: config.py:260
 msgid "Variables:"
 msgstr "Variables :"
 
-#: config.py:244
+#: config.py:262
 msgid "Unmodified prompts follow the notes language. A modified prompt is used as is, whatever the language."
 msgstr "Les prompts non modifiés suivent la langue de la fiche. Un prompt modifié est utilisé tel quel, quelle que soit la langue."
 
-#: config.py:258
+#: config.py:276
 msgid "Restore the default prompts"
 msgstr "Rétablir les prompts par défaut"
 
-#: config.py:261
+#: config.py:279
 msgid "Prompts"
 msgstr "Prompts"
 
-#: config.py:290
+#: config.py:308
 msgid "Export folder"
 msgstr "Dossier d'export"
 
-#: config.py:300 ui.py:119
+#: config.py:318 ui.py:119
 msgid "Claude Code not found"
 msgstr "Claude Code introuvable"
 
-#: config.py:309
+#: config.py:327
 #, python-brace-format
 msgid "Could not list the models: {error}"
 msgstr "Impossible de lister les modèles : {error}"
@@ -316,27 +317,31 @@ msgstr "Section ignorée (titre filtré) : {title}"
 msgid "No Gemini API key is configured."
 msgstr "Aucune clé API Gemini n'est configurée."
 
-#: gemini.py:130 gemini.py:131
+#: gemini.py:133
+msgid "Gemini quota reached. If your API key is on the free tier, check “Free tier key” in the extension settings (Gemini tab)."
+msgstr "Quota Gemini atteint. Si votre clé API est gratuite, cochez « Clé gratuite » dans les réglages de l'extension (onglet Gemini)."
+
+#: gemini.py:137 gemini.py:138
 #, python-brace-format
 msgid "Network error: {error}"
 msgstr "Erreur réseau : {error}"
 
-#: gemini.py:132
+#: gemini.py:139
 #, python-brace-format
 msgid "{message} — retrying in {seconds:.0f} s ({attempt}/{max})"
 msgstr "{message} — nouvel essai dans {seconds:.0f} s ({attempt}/{max})"
 
-#: gemini.py:151
+#: gemini.py:158
 #, python-brace-format
 msgid "Request refused by Gemini ({reason})."
 msgstr "Requête refusée par Gemini ({reason})."
 
-#: gemini.py:157
+#: gemini.py:164
 #, python-brace-format
 msgid "Empty response from Gemini (finishReason={reason})."
 msgstr "Réponse vide de Gemini (finishReason={reason})."
 
-#: gemini.py:159
+#: gemini.py:166
 msgid "Truncated response: length limit reached."
 msgstr "Réponse tronquée : limite de longueur atteinte."
 
@@ -345,42 +350,42 @@ msgstr "Réponse tronquée : limite de longueur atteinte."
 msgid "Markdown conversion failed ({error}): using plain text."
 msgstr "Conversion Markdown impossible ({error}) : texte brut utilisé."
 
-#: summarizer.py:115
+#: summarizer.py:127
 msgid "Splitting the book into chapters…"
 msgstr "Découpage du livre en chapitres…"
 
-#: summarizer.py:119
+#: summarizer.py:131
 msgid "No chapters could be extracted from this book."
 msgstr "Aucun chapitre n'a pu être extrait de ce livre."
 
-#: summarizer.py:121
+#: summarizer.py:133
 msgid "{sections} sections found, {chars:,} characters."
 msgstr "{sections} sections détectées, {chars:,} caractères."
 
-#: summarizer.py:125
+#: summarizer.py:137
 #, python-brace-format
 msgid "Engine: {engine} — notes language: {language}"
 msgstr "Moteur : {engine} — langue de la fiche : {language}"
 
-#: summarizer.py:169
+#: summarizer.py:202
 #, python-brace-format
 msgid "Summary {done}/{total}: {title}"
 msgstr "Résumé {done}/{total} : {title}"
 
-#: summarizer.py:180
+#: summarizer.py:211
 msgid "Writing the introduction…"
 msgstr "Rédaction de l'introduction…"
 
-#: summarizer.py:182
+#: summarizer.py:213
 msgid "Writing the critical analysis…"
 msgstr "Rédaction de l'analyse critique…"
 
-#: summarizer.py:188
+#: summarizer.py:224
 #, python-brace-format
 msgid "Done in {seconds:.0f} s ({calls} calls, {hits} cached answers"
 msgstr "Terminé en {seconds:.0f} s ({calls} appels, {hits} réponses en cache"
 
-#: summarizer.py:191
+#: summarizer.py:227
 #, python-brace-format
 msgid ", estimated cost ${cost:.2f}"
 msgstr ", coût indicatif {cost:.2f} $"
@@ -450,7 +455,7 @@ msgstr "Configurez votre clé API Gemini dans les réglages de l'extension."
 msgid "Reading notes ({engine}): {title}"
 msgstr "Fiche de lecture ({engine}) : {title}"
 
-#: ui.py:147 ui.py:281
+#: ui.py:147 ui.py:284
 msgid "Unsupported format"
 msgstr "Format non supporté"
 
@@ -482,46 +487,46 @@ msgstr "Impossible d'enregistrer dans le dossier du livre."
 msgid "Reading notes for “{title}” ready ({engine}): {chapters} chapters, {calls} calls"
 msgstr "Fiche « {title} » prête ({engine}) : {chapters} chapitres, {calls} appels"
 
-#: ui.py:220
+#: ui.py:225
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: ui.py:236
+#: ui.py:239
 msgid "Adding to the library"
 msgstr "Ajout à la bibliothèque"
 
-#: ui.py:236
+#: ui.py:239
 msgid "Could not add the notes as a book."
 msgstr "Impossible d'ajouter la fiche comme livre."
 
-#: ui.py:259
+#: ui.py:262
 msgid "No notes"
 msgstr "Aucune fiche"
 
-#: ui.py:259
+#: ui.py:262
 msgid "This book has no reading notes yet."
 msgstr "Ce livre n'a pas encore de fiche de lecture."
 
-#: ui.py:281
+#: ui.py:284
 msgid "EPUB, KEPUB or AZW3 required."
 msgstr "EPUB, KEPUB ou AZW3 requis."
 
-#: ui.py:288
+#: ui.py:291
 msgid "Splitting error"
 msgstr "Erreur de découpage"
 
-#: ui.py:294
+#: ui.py:297
 msgid "{number:3d}. {title}  —  {chars:,} characters"
 msgstr "{number:3d}. {title}  —  {chars:,} caractères"
 
-#: ui.py:296
+#: ui.py:299
 msgid "{sections} sections, {chars:,} characters (≈ {tokens:,} tokens)"
 msgstr "{sections} sections, {chars:,} caractères (≈ {tokens:,} tokens)"
 
-#: ui.py:299
+#: ui.py:302
 msgid "Log:"
 msgstr "Journal :"
 
-#: ui.py:301
+#: ui.py:304
 msgid "Chapter split"
 msgstr "Découpage en chapitres"

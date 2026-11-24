@@ -31,7 +31,11 @@ PART_PROMPT = """Livre : « {title} » de {authors}.
 La section « {chapter_title} » ({index}/{total}) est longue et a été découpée.
 Voici la partie {part}/{parts} de cette section.
 
-Prends des notes de synthèse détaillées sur cette partie (événements ou idées, personnages ou notions, citations marquantes).
+Prends des notes de synthèse sur cette partie (environ 400 à 700 mots, en listes à puces), dans l'ordre du texte :
+- les événements ou idées principaux ;
+- les personnages, notions ou arguments clés ;
+- une ou deux citations marquantes (entre guillemets).
+Ces notes seront fusionnées avec celles des autres parties : pas de titre, pas d'introduction ni de conclusion, commence directement.
 
 --- DÉBUT DU TEXTE ---
 {text}
@@ -108,7 +112,11 @@ Start the summary directly.
 The section “{chapter_title}” ({index}/{total}) is long and has been split.
 Here is part {part}/{parts} of this section.
 
-Take detailed summary notes on this part (events or ideas, characters or notions, striking quotations).
+Take summary notes on this part (about 400 to 700 words, as bullet points), following the order of the text:
+- the main events or ideas;
+- the key characters, notions or arguments;
+- one or two striking quotations (in quotation marks).
+These notes will be merged with those of the other parts: no headings, no introduction or conclusion, start directly.
 
 --- BEGINNING OF TEXT ---
 {text}
@@ -178,7 +186,11 @@ Empieza directamente con el resumen.
 La sección «{chapter_title}» ({index}/{total}) es larga y se ha dividido.
 Esta es la parte {part}/{parts} de la sección.
 
-Toma notas de síntesis detalladas sobre esta parte (acontecimientos o ideas, personajes o conceptos, citas destacadas).
+Toma notas de síntesis sobre esta parte (entre 400 y 700 palabras aproximadamente, en listas con viñetas), siguiendo el orden del texto:
+- los acontecimientos o ideas principales;
+- los personajes, conceptos o argumentos clave;
+- una o dos citas destacadas (entre comillas).
+Estas notas se fusionarán con las de las demás partes: sin títulos, sin introducción ni conclusión, empieza directamente.
 
 --- INICIO DEL TEXTO ---
 {text}
@@ -248,7 +260,11 @@ Beginne direkt mit der Zusammenfassung.
 Der Abschnitt „{chapter_title}“ ({index}/{total}) ist lang und wurde aufgeteilt.
 Hier ist Teil {part}/{parts} dieses Abschnitts.
 
-Mache ausführliche zusammenfassende Notizen zu diesem Teil (Ereignisse oder Gedanken, Figuren oder Begriffe, prägnante Zitate).
+Mache zusammenfassende Notizen zu diesem Teil (etwa 400 bis 700 Wörter, als Aufzählung), in der Reihenfolge des Textes:
+- die wichtigsten Ereignisse oder Gedanken;
+- die zentralen Figuren, Begriffe oder Argumente;
+- ein oder zwei prägnante Zitate (in Anführungszeichen).
+Diese Notizen werden mit denen der anderen Teile zusammengeführt: keine Überschriften, keine Einleitung und kein Fazit, beginne direkt.
 
 --- TEXTANFANG ---
 {text}
@@ -318,7 +334,11 @@ Inizia direttamente con il riassunto.
 La sezione «{chapter_title}» ({index}/{total}) è lunga ed è stata suddivisa.
 Ecco la parte {part}/{parts} di questa sezione.
 
-Prendi appunti di sintesi dettagliati su questa parte (eventi o idee, personaggi o concetti, citazioni significative).
+Prendi appunti di sintesi su questa parte (circa 400-700 parole, in elenchi puntati), seguendo l'ordine del testo:
+- gli eventi o le idee principali;
+- i personaggi, i concetti o gli argomenti chiave;
+- una o due citazioni significative (tra virgolette).
+Questi appunti verranno uniti a quelli delle altre parti: niente titoli, niente introduzione né conclusione, inizia direttamente.
 
 --- INIZIO DEL TESTO ---
 {text}
@@ -388,7 +408,11 @@ Começa diretamente pelo resumo.
 A secção «{chapter_title}» ({index}/{total}) é longa e foi dividida.
 Eis a parte {part}/{parts} desta secção.
 
-Toma notas de síntese detalhadas sobre esta parte (acontecimentos ou ideias, personagens ou noções, citações marcantes).
+Toma notas de síntese sobre esta parte (cerca de 400 a 700 palavras, em listas com marcadores), seguindo a ordem do texto:
+- os acontecimentos ou ideias principais;
+- as personagens, noções ou argumentos-chave;
+- uma ou duas citações marcantes (entre aspas).
+Estas notas serão fundidas com as das outras partes: sem títulos, sem introdução nem conclusão, começa diretamente.
 
 --- INÍCIO DO TEXTO ---
 {text}

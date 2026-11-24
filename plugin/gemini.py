@@ -68,7 +68,7 @@ def _error_message(http_error):
 class GeminiClient:
 
     def __init__(self, api_key, model, temperature=0.4, max_retries=6, min_interval=0.0,
-                 timeout=300, should_stop=None, log=None):
+                 timeout=300, free_tier=False, should_stop=None, log=None):
         if not api_key:
             raise GeminiError(_('No Gemini API key is configured.'))
         self.api_key = api_key
@@ -81,6 +81,8 @@ class GeminiClient:
         self.log = log or (lambda *a: None)
         self._lock = threading.Lock()
         self._next_slot = 0.0
+        self.free_tier = free_tier
+        self._hinted = False
         self.calls = 0
         self.label = f'Gemini ({model})'
         self.cache_tag = f'gemini:{model}'
@@ -117,7 +119,8 @@ class GeminiClient:
                 raise Aborted()
             self._wait_rate_limit()
             try:
-                self.calls += 1
+                with self._lock:
+                    self.calls += 1
                 data = _http('POST', self.url, self.api_key, payload, timeout=self.timeout)
                 return self._parse(data)
             except urllib.error.HTTPError as e:
@@ -125,6 +128,10 @@ class GeminiClient:
                 if e.code not in RETRYABLE_STATUS or attempt == self.max_retries:
                     raise GeminiError(msg) from e
                 delay = self._retry_delay(e, msg, attempt)
+                if e.code == 429 and not self.free_tier and not self._hinted:
+                    self._hinted = True
+                    self.log(_('Gemini quota reached. If your API key is on the free tier, check '
+                               '“Free tier key” in the extension settings (Gemini tab).'))
             except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
                 if attempt == self.max_retries:
                     raise GeminiError(_('Network error: {error}').format(error=e)) from e
